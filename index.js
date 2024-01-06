@@ -7,13 +7,16 @@ const cors = require('cors')
 app.use(cors())
 app.use(express.json())
 const userRoute = require('./routes/userRouter');
+const authRoute = require('./routes/authRoute');
 
 app.get('/', function (req, res) {
     res.send({ title: 'GeeksforGeeks' });
 });
 
 app.use('/api',userRoute);
-
+app.use('/',authRoute);
+app.set('view engine','ejs')
+app.set('views','./views');
 const mongoose = require('mongoose')
 
 mongoose.connect('mongodb://localhost:27017/restful-auth-api').then(()=>

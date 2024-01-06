@@ -25,3 +25,15 @@ exports.registerValidator=[
         }
     }).withMessage("Please upload an image JPEG, PNG")
 ];
+
+exports.sendMailVerificationValidator=[
+    check('email','Please enter a valid email').isEmail().normalizeEmail({
+        gmail_remove_dots: true
+    }),
+]
+
+exports.sendPasswordResetValidator=[
+    check('email','Please enter a valid email').isEmail().normalizeEmail({
+        gmail_remove_dots: true
+    }),
+]
