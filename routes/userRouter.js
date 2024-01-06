@@ -8,7 +8,9 @@ const multer=require('multer')
 
 const storage=multer.diskStorage({
     destination: (req,file,cb)=>{
-        cb(null,path.join(__dirname,"../public/images"));
+        if(file.mimetype==='image/jpeg' || file.mimetype==='image/png' || file.mimetype==='image/jpg'){
+            cb(null,path.join(__dirname,"../public/images"));
+        }
     },
     filename: (req,file,cb)=>{
         const name = Date.now() + '-' + file.originalname;
@@ -16,10 +18,22 @@ const storage=multer.diskStorage({
     }
 });
 
-const upload=multer({storage: storage})
+const fileFilter = (req,file,cb)=>{
+    if(file.mimetype==='image/jpeg' || file.mimetype==='image/png' || file.mimetype==='image/jpg'){
+        cb(null,true);
+    }
+    else{
+        cb(null,false);
+    }
+}
+
+const upload=multer({
+    storage: storage,
+    fileFilter: fileFilter
+})
 
 const userController = require('../controllers/userController');
-
-router.post('/register',upload.single('image'),userController.userRegister);
+const {registerValidator} =require('../helpers/validation')
+router.post('/register',upload.single('image'),registerValidator,userController.userRegister);
 
 module.exports = router
